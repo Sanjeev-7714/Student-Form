@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: white;
+            width: 400px;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4cd4a0;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .student-list {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .student-list table {
+            width: 100%;
+        }
+
+        .student-list th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .student-list td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .gender-options {
+            display: flex;
+            align-items: center;
+        }
+
+        .gender-options label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>STUDENT FORM</h1>
+
+    <div class="form-container">
+        <table>
+            <tr>
+                <td style="width: 100px;">Name</td>
+                <td><input type="text" id="name" required></td>
+            </tr>
+            <tr>
+                <td>Age</td>
+                <td><input type="number" id="age" required></td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>
+                    <div class="gender-options">
+                        <input type="radio" id="male" name="gender" value="Male" checked>
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="FeMale">
+                        <label for="female">Female</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Course</td>
+                <td><input type="text" id="course" required></td>
+            </tr>
+            <tr>
+                <td>E-mail</td>
+                <td><input type="email" id="email" required></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="save-btn" onclick="saveStudent()">Save</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="student-list" id="studentListContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th>NAME</th>
+                    <th>AGE</th>
+                    <th>COURSE</th>
+                    <th>GENDER</th>
+                    <th>EMAIL</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody id="studentList">
+                <!-- Student data will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to save student data
+        function saveStudent() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const course = document.getElementById('course').value;
+            const email = document.getElementById('email').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            // Validate form
+            if (!name || !age || !course || !email) {
+                alert("Please fill all the fields");
+                return;
+            }
+
+            // Create new table row
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${name}</td>
+                <td>${age}</td>
+                <td>${course.toUpperCase()}</td>
+                <td>${gender}</td>
+                <td>${email}</td>
+                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+            `;
+
+            // Add row to table
+            document.getElementById('studentList').appendChild(newRow);
+
+            // Show the student list container if it's hidden
+            document.getElementById('studentListContainer').style.display = 'block';
+
+            // Clear form fields
+            document.getElementById('name').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('course').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('male').checked = true;
+        }
+
+        // Function to delete a row
+        function deleteRow(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+
+            // Hide the table if there are no more students
+            if (document.getElementById('studentList').children.length === 0) {
+                document.getElementById('studentListContainer').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
